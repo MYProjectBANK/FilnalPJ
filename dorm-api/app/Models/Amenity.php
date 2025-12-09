@@ -9,5 +9,15 @@ class Amenity extends Model
 {
     use HasFactory;
 
-    protected $table = 'amenities'; // ชื่อตารางจริงของคุณ
+    protected $table = 'amenities'; 
+
+    protected $fillable = ['name'];
+
+
+    public function dorms()
+{
+    return $this->belongsToMany(Dorm::class, 'dorm_amenities');
 }
+}
+
+

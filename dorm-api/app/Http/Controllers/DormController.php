@@ -7,6 +7,19 @@ use App\Models\Dorm;
 
 class DormController extends Controller
 {
+
+    public function recommend()
+{
+    return Dorm::inRandomOrder()->take(10)->get();
+}
+
+public function byCategory($id)
+{
+    return Dorm::whereHas('categories', function ($q) use ($id) {
+        $q->where('category_id', $id);
+    })->get();
+}
+
     // GET /api/dorms
     public function index(Request $request)
     {

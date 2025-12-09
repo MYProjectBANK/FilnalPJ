@@ -11,27 +11,28 @@ class Dorm extends Model
 
     protected $table = 'dorms';
 
-    protected $fillable = [
-        'name',
-        'description',
-        'province',
-        'district',
-        'subdistrict',
-        'street',
-        'zipcode',
-        'phone',
-        'email',
-        'facebook',
-        'line_id',
-        'price_min',
-        'price_max',
-        'deposit_price',
-        'electricity_rate',
-        'water_rate',
-        'internet_fee',
-        'latitude',
-        'longitude',
-    ];
+protected $fillable = [
+    'name',
+    'description',
+    'province',
+    'district',
+    'subdistrict',
+    'street',
+    'zipcode',
+    'phone',
+    'email',
+    'facebook',
+    'line_id',
+    'price_min',
+    'price_max',
+    'deposit_price',
+    'electricity_rate',
+    'water_rate',
+    'internet_fee',
+    'latitude',
+    'longitude',
+];
+
 
     // Relation: Categories
     public function categories()

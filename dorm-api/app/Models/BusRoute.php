@@ -9,5 +9,12 @@ class BusRoute extends Model
 {
     use HasFactory;
 
-    protected $table = 'bus_routes'; // ชื่อตารางจริงของคุณ
+    protected $table = 'bus_routes';
+
+    public $timestamps = false;
+
+    protected $fillable = [
+        'route_number',
+        'route_name',
+    ];
 }

@@ -16,17 +16,23 @@ class Review extends Model
         'dorm_id',
         'comment',
         'status',
+        'approved_by',
+        'approved_at'
     ];
 
-    public $timestamps = true; 
+    protected $dates = ['approved_at'];
 
-    public function dorm()
-    {
-        return $this->belongsTo(Dorm::class, 'dorm_id');
-    }
+public function user() {
+    return $this->belongsTo(User::class, 'user_id');
+}
 
-    public function user()
+public function dorm() {
+    return $this->belongsTo(Dorm::class, 'dorm_id');
+}
+
+
+    public function admin()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'approved_by');
     }
 }

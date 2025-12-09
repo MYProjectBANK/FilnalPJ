@@ -9,5 +9,12 @@ class TrainLine extends Model
 {
     use HasFactory;
 
-    protected $table = 'train_lines'; // ชื่อตารางจริงของคุณ
+    protected $table = 'train_lines';
+
+    public $timestamps = false;
+
+    protected $fillable = [
+        'line_name',
+        'station_name',
+    ];
 }

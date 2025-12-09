@@ -7,51 +7,65 @@ use App\Models\Zone;
 
 class AdminZoneController extends Controller
 {
-    // GET /api/admin/zones
-    public function index()
-    {
-        return response()->json(Zone::all());
-    }
+    // GET /admin/zones
+public function index()
+{
+    return Zone::all();
+}
 
-    // POST /api/admin/zones
+
+    // POST /admin/zones
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string',
+        $validated = $request->validate([
+            'name' => 'required|string|max:255'
         ]);
 
-        $zone = Zone::create($request->all());
+        $zone = Zone::create($validated);
 
         return response()->json([
-            'message' => 'Zone created',
-            'zone' => $zone
-        ]);
+            'status' => true,
+            'message' => 'Zone created successfully',
+            'data' => $zone
+        ], 201);
     }
 
-    // GET /api/admin/zones/{id}
+    // GET /admin/zones/{id}
     public function show($id)
     {
-        return response()->json(Zone::findOrFail($id));
-    }
-
-    // PUT /api/admin/zones/{id}
-    public function update(Request $request, $id)
-    {
-        $zone = Zone::findOrFail($id);
-        $zone->update($request->all());
-
         return response()->json([
-            'message' => 'Zone updated',
-            'zone' => $zone
+            'status' => true,
+            'data'   => Zone::findOrFail($id)
         ]);
     }
 
-    // DELETE /api/admin/zones/{id}
+    // PUT /admin/zones/{id}
+    public function update(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255'
+        ]);
+
+        $zone = Zone::findOrFail($id);
+        $zone->update($validated);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Zone updated successfully',
+            'data' => $zone
+        ]);
+    }
+
+    // DELETE /admin/zones/{id}
     public function destroy($id)
     {
         $zone = Zone::findOrFail($id);
+
         $zone->delete();
 
-        return response()->json(['message' => 'Zone deleted']);
+        return response()->json([
+            'status' => true,
+            'message' => 'Zone deleted successfully'
+        ]);
     }
 }
