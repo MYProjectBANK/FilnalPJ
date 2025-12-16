@@ -4,16 +4,34 @@
 
     <button
       v-if="showMore"
-      class="text-blue-600 hover:underline"
+      @click="goTo"
+      class="text-blue-600 hover:underline text-sm font-medium"
     >
-      ดูทั้งหมด >
+      ดูทั้งหมด →
     </button>
   </div>
 </template>
 
 <script setup>
-defineProps({
+import { useRouter } from 'vue-router';
+
+const props = defineProps({
   title: String,
-  showMore: Boolean,
+  showMore: {
+    type: Boolean,
+    default: false,
+  },
+  to: {
+    type: String,
+    default: "",
+  },
 });
+
+const router = useRouter();
+
+const goTo = () => {
+  if (props.to) {
+    router.push(props.to);
+  }
+};
 </script>

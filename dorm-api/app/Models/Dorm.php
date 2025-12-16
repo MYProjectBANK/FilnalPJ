@@ -86,4 +86,7 @@ public function trainLines()
     {
         return $this->hasMany(Favorite::class, 'dorm_id');
     }
+
+
+    
 }

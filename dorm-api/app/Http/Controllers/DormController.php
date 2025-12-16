@@ -7,19 +7,6 @@ use App\Models\Dorm;
 
 class DormController extends Controller
 {
-
-    public function recommend()
-{
-    return Dorm::inRandomOrder()->take(10)->get();
-}
-
-public function byCategory($id)
-{
-    return Dorm::whereHas('categories', function ($q) use ($id) {
-        $q->where('category_id', $id);
-    })->get();
-}
-
     // GET /api/dorms
     public function index(Request $request)
     {
@@ -28,7 +15,10 @@ public function byCategory($id)
         $dorms = Dorm::with(['categories', 'amenities', 'zones', 'images', 'reviews', 'busRoutes', 'trainLines'])
             ->get()
             ->map(function ($dorm) use ($user_id) {
-                $dorm->is_favorited = $user_id ? $dorm->favorites()->where('user_id', $user_id)->exists() : false;
+                $dorm->is_favorited = $user_id
+                    ? $dorm->favorites()->where('user_id', $user_id)->exists()
+                    : false;
+
                 return $dorm;
             });
 
@@ -47,7 +37,9 @@ public function byCategory($id)
             return response()->json(['message' => 'Dorm not found'], 404);
         }
 
-        $dorm->is_favorited = $user_id ? $dorm->favorites()->where('user_id', $user_id)->exists() : false;
+        $dorm->is_favorited = $user_id
+            ? $dorm->favorites()->where('user_id', $user_id)->exists()
+            : false;
 
         return response()->json($dorm);
     }

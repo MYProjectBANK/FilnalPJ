@@ -1,14 +1,14 @@
 <template>
-  <FilterButton label="หมวดหมู่">
+  <FilterButton label="การเดินทาง">
     <div class="space-y-1">
       <button
-        v-for="c in categories"
-        :key="c.id"
+        v-for="b in busRoutes"
+        :key="b.id"
         class="flex justify-between items-center w-full text-left px-2 py-1 hover:bg-gray-100 rounded"
-        @click="emit('select', c.id)"
+        @click="emit('select', b.id)"
       >
-        <span>{{ c.name }}</span>
-        <span v-if="modelValue === c.id" class="text-green-500 font-bold">✓</span>
+        <span>สาย {{ b.route_number }} - {{ b.route_name }}</span>
+        <span v-if="modelValue === b.id" class="text-green-500 font-bold">✓</span>
       </button>
     </div>
   </FilterButton>
@@ -18,7 +18,7 @@
 import FilterButton from './FilterButton.vue';
 
 defineProps({
-  categories: Array,
+  busRoutes: Array,
   modelValue: Number,
 });
 

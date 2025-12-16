@@ -57,7 +57,29 @@ const routes = [
 
   /* ---------- Admin: User Management ---------- */
   { path: '/admin/users', component: Users },
+
+  {
+  path: "/dorms/category/:type",
+  name: "DormCategoryPage",
+  component: () => import("../views/DormCategoryPage.vue"),
+},
+
+{
+  path: "/dorms/:id",
+  name: "DormDetail",
+  component: () => import("../views/DormDetailPage.vue"),
+},
+
+{
+  path: "/profile",
+  name: "Profile",
+  component: () => import("../views/ProfilePage.vue"),
+},
+
+
 ];
+
+
 
 /* ==============================
    Router Setup

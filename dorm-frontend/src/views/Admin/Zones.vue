@@ -77,7 +77,7 @@ const config = { headers: { Authorization: `Bearer ${token}` } };
 
 const fetchZones = async () => {
     const res = await axios.get("http://127.0.0.1:8000/api/admin/zones", config);
-    zones.value = res.data; 
+    zones.value = res.data.data; 
 };
 
 const openCreate = () => {

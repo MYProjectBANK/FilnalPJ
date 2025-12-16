@@ -10,8 +10,12 @@ class AdminZoneController extends Controller
     // GET /admin/zones
 public function index()
 {
-    return Zone::all();
+    return response()->json([
+        'status' => true,
+        'data' => Zone::all()
+    ]);
 }
+
 
 
     // POST /admin/zones
