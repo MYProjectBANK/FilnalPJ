@@ -56,7 +56,7 @@ class PublicDormController extends Controller
 
     public function show($id)
     {
-        $dorm = Dorm::with(['images', 'categories', 'zones'])->findOrFail($id);
+        $dorm = Dorm::with(['images', 'categories', 'zones', 'amenities', 'busRoutes', 'trainLines'])->findOrFail($id);
         $dorm->price_range = $this->priceRange($dorm);
         return $dorm;
     }

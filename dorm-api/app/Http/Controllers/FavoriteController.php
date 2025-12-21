@@ -56,14 +56,23 @@ class FavoriteController extends Controller
     }
 
     // GET /api/favorites
-    public function list(Request $request)
-    {
-        $user = $request->user();
+// GET /api/favorites
+public function list(Request $request)
+{
+    $user = $request->user();
 
-        $favorites = Favorite::where('user_id', $user->id)
-            ->with('dorm')
-            ->get();
+    $favorites = Favorite::where('user_id', $user->id)
+        ->with([
+            'dorm.images',
+            'dorm.categories',
+            'dorm.zones',
+            'dorm.amenities',
+            'dorm.busRoutes',
+            'dorm.trainLines',
+        ])
+        ->get();
 
-        return response()->json($favorites);
-    }
+    return response()->json($favorites);
+}
+
 }

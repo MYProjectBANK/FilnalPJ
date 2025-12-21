@@ -1,0 +1,13 @@
+รัน php 
+php artisan serve
+
+php artisan route:clear
+php artisan cache:clear
+php artisan config:clear
+php artisan optimize:clear
+
+
+admin vittavat148@gmail.com pass 123456
+user testaad@gmail.com pass 123456
+
+

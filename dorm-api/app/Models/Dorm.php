@@ -38,7 +38,7 @@ protected $fillable = [
     public function categories()
     {
         return $this->belongsToMany(Category::class, 'dorm_categories', 'dorm_id', 'category_id')
-                    ->as('pivotCategory'); // ตั้ง alias เพื่อป้องกัน SQL alias ซ้ำ
+                    ->as('pivotCategory'); 
     }
 
     // Relation: Amenities

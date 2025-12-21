@@ -1,8 +1,6 @@
 <template>
-  <div class="flex h-screen">
-    <Sidebar />
-
-    <div class="flex-1 flex flex-col">
+<div class="flex h-screen bg-gray-50">
+  <Sidebar /> <div class="flex-1 flex flex-col overflow-hidden">
       <Header />
 
       <main class="p-4 overflow-auto flex-1 bg-gray-100">

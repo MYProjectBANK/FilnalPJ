@@ -47,7 +47,7 @@
           <!-- ADMIN ONLY -->
           <button
             v-if="role === 'admin'"
-            @click="$router.push('/admin/dorms')"
+            @click="$router.push('/admin/dashboard')"
             class="px-3 py-1 bg-purple-600 text-white rounded"
           >
             Admin
