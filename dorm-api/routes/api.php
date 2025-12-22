@@ -132,6 +132,9 @@ Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function ()
 
     // Users
     Route::apiResource('users', AdminUserController::class);
+
+    Route::delete('/dorm-images/{id}', [AdminDormController::class, 'deleteImage']);
+
 });
 
 

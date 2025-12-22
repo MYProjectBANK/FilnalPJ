@@ -60,7 +60,7 @@
                             <span class="text-lg">❤️</span> รายการที่ถูกใจ
                             <span v-if="favorites.length"
                                 class="ml-auto bg-gray-100 text-gray-600 text-xs px-2 py-0.5 rounded-full">{{
-                                favorites.length }}</span>
+                                    favorites.length }}</span>
                         </button>
                     </div>
 
@@ -128,9 +128,29 @@
                                 <label class="label">คณะ / สาขาวิชา</label>
                                 <div class="relative">
                                     <select v-model="profileForm.faculty" class="input-field appearance-none">
-                                        <option value="">-- เลือกคณะ --</option>
-                                        <option v-for="f in faculties" :key="f" :value="f">{{ f }}</option>
+                                        <option value="">-- เลือกสาขาวิชา --</option>
+
+                                        <option>สาขาวิชาวิศวกรรมไฟฟ้า</option>
+                                        <option>สาขาวิชาวิศวกรรมเครื่องกล</option>
+                                        <option>สาขาวิชาวิศวกรรมอุตสาหการ</option>
+                                        <option>สาขาวิชาวิศวกรรมคอมพิวเตอร์</option>
+                                        <option>สาขาวิชาวิศวกรรมเมคคาทรอนิกส์</option>
+                                        <option>สาขาวิชาวิศวกรรมไฟฟ้าสื่อสารและระบบอัจฉริยะ</option>
+                                        <option>สาขาวิชาวิศวกรรมโยธา</option>
+                                        <option>สาขาวิชาวิศวกรรมเครื่องมือและแม่พิมพ์</option>
+                                        <option>สาขาวิชาวิศวกรรมการผลิตเครื่องประดับ</option>
+                                        <option>สาขาวิชาวิศวกรรมเทคโนโลยีนวัตกรรมเพื่อความยั่งยืน(ต่อเนื่อง)</option>
+                                        <option>สาขาวิชาอัญมณีรังสรรค์</option>
+
+                                        <option>สาขาวิชาวิทยาการคอมพิวเตอร์</option>
+                                        <option>สาขาวิชาวิทยาศาสตร์และเทคโนโลยีสิ่งแวดล้อม</option>
+                                        <option>สาขาวิชาวัสดุศาสตร์อุตสาหกรรม</option>
+                                        <option>สาขาวิชาวิทยาการข้อมูลและเทคโนโลยีสารสนเทศ</option>
+                                        <option>สาขาวิชาเทคโนโลยีสุขภาพ เครื่องสำอาง และการชะลอวัย</option>
+                                        <option>สาขาวิชาสถิติสารสนเทศ</option>
+                                        <option>สาขาวิชาการจัดการสภาพภูมิอากาศและสิ่งแวดล้อม</option>
                                     </select>
+
                                     <span class="absolute right-3 top-3 text-gray-400 pointer-events-none">▼</span>
                                 </div>
                             </div>
@@ -152,17 +172,17 @@
 
                         <div v-if="favoritesLoading" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div v-for="i in 2" :key="i" class="bg-white rounded-xl h-40 animate-pulse"></div>
-                                    <div class="p-4 space-y-3">
-            <div class="h-5 bg-gray-200 rounded w-3/4 animate-pulse"></div>
-            <div class="h-3 bg-gray-100 rounded w-1/2 animate-pulse"></div>
-            <div class="flex gap-2 mt-2">
-                <div class="h-4 bg-gray-100 rounded w-10 animate-pulse"></div>
-                <div class="h-4 bg-gray-100 rounded w-16 animate-pulse"></div>
-            </div>
-        </div>
+                            <div class="p-4 space-y-3">
+                                <div class="h-5 bg-gray-200 rounded w-3/4 animate-pulse"></div>
+                                <div class="h-3 bg-gray-100 rounded w-1/2 animate-pulse"></div>
+                                <div class="flex gap-2 mt-2">
+                                    <div class="h-4 bg-gray-100 rounded w-10 animate-pulse"></div>
+                                    <div class="h-4 bg-gray-100 rounded w-16 animate-pulse"></div>
+                                </div>
+                            </div>
                         </div>
 
-    
+
 
                         <div v-else-if="favorites.length === 0"
                             class="bg-white rounded-2xl shadow-sm border border-gray-100 p-12 text-center">
@@ -176,7 +196,7 @@
                         </div>
 
                         <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                            
+
                             <template v-for="fav in favorites" :key="fav.id">
                                 <div v-if="fav && fav.dorm"
                                     class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group cursor-pointer"
@@ -200,7 +220,7 @@
                                         </h3>
                                         <div class="flex items-center text-gray-500 text-xs mb-3">
                                             <span class="mr-1">📍</span> {{ fav.dorm.subdistrict }}, {{
-                                            fav.dorm.district }}
+                                                fav.dorm.district }}
                                         </div>
 
                                         <div class="flex items-center gap-2 mt-2">
@@ -319,19 +339,26 @@ const updateProfile = async () => {
     successMessage.value = "";
 
     try {
-        await api.put("/api/user/update", profileForm.value, {
+        const payload = {
+            ...profileForm.value,
+            faculty: profileForm.value.faculty === "" ? null : profileForm.value.faculty,
+            year_level: profileForm.value.year_level === "" ? null : profileForm.value.year_level,
+        };
+
+        await api.put("/api/user/update", payload, {
             headers: { Authorization: `Bearer ${token}` },
         });
+
         successMessage.value = "อัปเดตข้อมูลเรียบร้อยแล้ว";
-        // ให้ข้อความหายไปเองหลังจาก 3 วิ
         setTimeout(() => successMessage.value = "", 3000);
         await loadUser();
     } catch {
         errorMessage.value = "เกิดข้อผิดพลาดในการอัปเดตข้อมูล";
+    } finally {
+        savingProfile.value = false;
     }
-
-    savingProfile.value = false;
 };
+
 
 /* ---------------- INIT ---------------- */
 onMounted(() => {

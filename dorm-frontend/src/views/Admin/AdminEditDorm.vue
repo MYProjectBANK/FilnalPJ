@@ -143,7 +143,8 @@
                                 <label class="block text-sm font-medium text-gray-700">Price Min (THB)</label>
                                 <div class="mt-1 relative rounded-md shadow-sm">
                                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <span class="text-gray-500 sm:text-sm">฿</span></div>
+                                        <span class="text-gray-500 sm:text-sm">฿</span>
+                                    </div>
                                     <input v-model="form.price_min" type="number"
                                         class="block w-full pl-7 rounded-md border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm h-10 border" />
                                 </div>
@@ -153,7 +154,8 @@
                                 <label class="block text-sm font-medium text-gray-700">Price Max (THB)</label>
                                 <div class="mt-1 relative rounded-md shadow-sm">
                                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <span class="text-gray-500 sm:text-sm">฿</span></div>
+                                        <span class="text-gray-500 sm:text-sm">฿</span>
+                                    </div>
                                     <input v-model="form.price_max" type="number"
                                         class="block w-full pl-7 rounded-md border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm h-10 border" />
                                 </div>
@@ -257,20 +259,17 @@
 
                         <div v-if="dorm.images && dorm.images.length > 0" class="grid grid-cols-2 gap-2 mb-6">
                             <div v-for="img in dorm.images" :key="img.id"
-                                class="relative group aspect-w-4 aspect-h-3 rounded-lg overflow-hidden bg-gray-100">
-                                <img :src="imageUrl(img.image_path)" class="object-cover w-full h-24" />
+                                class="relative group rounded-lg overflow-hidden bg-gray-100 aspect-[4/3]">
+                                <img :src="imageUrl(img.image_path)" class="w-full h-full object-cover" />
                                 <div
-                                    class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all flex items-center justify-center">
-                                    <button @click="deleteImage(img.id)"
-                                        class="opacity-0 group-hover:opacity-100 bg-red-600 text-white rounded-full p-1 hover:bg-red-700 transition-all transform scale-90 group-hover:scale-100"
+                                    class="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all flex items-center justify-center pointer-events-none">
+                                    <button @click="deleteImage(img)"
+                                        class="pointer-events-auto opacity-0 group-hover:opacity-100 bg-red-600 text-white rounded-full p-1 hover:bg-red-700 transition-all transform scale-90 group-hover:scale-100"
                                         title="Delete Image">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
-                                            viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M6 18L18 6M6 6l12 12" />
-                                        </svg>
+                                        Delete
                                     </button>
                                 </div>
+
                             </div>
                         </div>
                         <p v-else class="text-sm text-gray-500 italic mb-4">No images uploaded yet.</p>
@@ -437,21 +436,25 @@ export default {
             }
         };
 
-        // Delete image
-        const deleteImage = async (imgId) => {
+        const deleteImage = async (img) => {
             if (!confirm("Are you sure you want to delete this image?")) return;
+
+            const deleteId = img?.pivot?.id ?? img?.dorm_image_id ?? img?.id;
+            if (!deleteId) return alert("ไม่พบ id ของรูปที่จะลบ");
 
             try {
                 await axios.delete(
-                    `http://127.0.0.1:8000/api/admin/dorm-images/${imgId}`,
+                    `http://127.0.0.1:8000/api/admin/dorm-images/${deleteId}`,
                     { headers }
                 );
-                fetchDorm();
+                await fetchDorm();
             } catch (error) {
                 console.error("Delete failed:", error);
                 alert("Failed to delete image.");
             }
         };
+
+
 
         onMounted(fetchDorm);
 

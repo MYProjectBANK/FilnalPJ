@@ -10,16 +10,7 @@
                             users.length }}</span> accounts)
                     </p>
                 </div>
-                <div class="mt-4 sm:mt-0">
-                    <button @click="openCreate"
-                        class="inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all">
-                        <svg class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
-                        </svg>
-                        เพิ่มผู้ใช้งานใหม่
-                    </button>
-                </div>
+
             </div>
 
             <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
@@ -180,8 +171,12 @@
                                     </div>
                                     <div>
                                         <label class="label">คณะ / สาขา</label>
-                                        <input v-model="form.faculty" type="text" class="input-field"
-                                            placeholder="Faculty name">
+                                        <select v-model="form.faculty" class="input-field">
+                                            <option v-for="opt in facultyOptions" :key="opt.value ?? 'null'"
+                                                :value="opt.value">
+                                                {{ opt.label }}
+                                            </option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -244,17 +239,17 @@ const fetchUsers = async () => {
     }
 };
 
-const openCreate = () => {
-    mode.value = "create";
-    form.value = { id: null, fullname: "", email: "", phone: "", year_level: "", faculty: "", password: "", role: "user" };
+const edit = (u) => {
+    mode.value = "edit";
+
+    // ถ้าค่า faculty ใน DB ไม่อยู่ใน option → ตั้งเป็น null
+    const allowed = new Set(facultyOptions.map(x => x.value).filter(v => v !== null));
+    const safeFaculty = allowed.has(u.faculty) ? u.faculty : null;
+
+    form.value = { ...u, faculty: safeFaculty, password: "" };
     showModal.value = true;
 };
 
-const edit = (u) => {
-    mode.value = "edit";
-    form.value = { ...u, password: "" };
-    showModal.value = true;
-};
 
 const save = async () => {
     if (!form.value.fullname || !form.value.email) return alert("กรุณากรอกชื่อและอีเมล");
@@ -271,6 +266,34 @@ const save = async () => {
         alert("ไม่สามารถบันทึกข้อมูลได้");
     }
 };
+
+const facultyOptions = [
+    { value: null, label: '— ไม่ระบุ —' },
+
+    // Engineering
+    { value: 'สาขาวิชาวิศวกรรมไฟฟ้า', label: 'สาขาวิชาวิศวกรรมไฟฟ้า' },
+    { value: 'สาขาวิชาวิศวกรรมเครื่องกล', label: 'สาขาวิชาวิศวกรรมเครื่องกล' },
+    { value: 'สาขาวิชาวิศวกรรมอุตสาหการ', label: 'สาขาวิชาวิศวกรรมอุตสาหการ' },
+    { value: 'สาขาวิชาวิศวกรรมคอมพิวเตอร์', label: 'สาขาวิชาวิศวกรรมคอมพิวเตอร์' },
+    { value: 'สาขาวิชาวิศวกรรมเมคคาทรอนิกส์', label: 'สาขาวิชาวิศวกรรมเมคคาทรอนิกส์' },
+    { value: 'สาขาวิชาวิศวกรรมไฟฟ้าสื่อสารและระบบอัจฉริยะ', label: 'สาขาวิชาวิศวกรรมไฟฟ้าสื่อสารและระบบอัจฉริยะ' },
+    { value: 'สาขาวิชาวิศวกรรมโยธา', label: 'สาขาวิชาวิศวกรรมโยธา' },
+    { value: 'สาขาวิชาวิศวกรรมเครื่องมือและแม่พิมพ์', label: 'สาขาวิชาวิศวกรรมเครื่องมือและแม่พิมพ์' },
+    { value: 'สาขาวิชาวิศวกรรมการผลิตเครื่องประดับ', label: 'สาขาวิชาวิศวกรรมการผลิตเครื่องประดับ' },
+    { value: 'สาขาวิชาวิศวกรรมเทคโนโลยีนวัตกรรมเพื่อความยั่งยืน(ต่อเนื่อง)', label: 'สาขาวิชาวิศวกรรมเทคโนโลยีนวัตกรรมเพื่อความยั่งยืน(ต่อเนื่อง)' },
+
+    // Others / Science-IT-ish
+    { value: 'สาขาวิชาอัญมณีรังสรรค์', label: 'สาขาวิชาอัญมณีรังสรรค์' },
+    { value: 'สาขาวิชาวิทยาการคอมพิวเตอร์', label: 'สาขาวิชาวิทยาการคอมพิวเตอร์' },
+    { value: 'สาขาวิชาวิทยาศาสตร์และเทคโนโลยีสิ่งแวดล้อม', label: 'สาขาวิชาวิทยาศาสตร์และเทคโนโลยีสิ่งแวดล้อม' },
+    { value: 'สาขาวิชาวัสดุศาสตร์อุตสาหกรรม', label: 'สาขาวิชาวัสดุศาสตร์อุตสาหกรรม' },
+    { value: 'สาขาวิชาวิทยาการข้อมูลและเทคโนโลยีสารสนเทศ', label: 'สาขาวิชาวิทยาการข้อมูลและเทคโนโลยีสารสนเทศ' },
+    { value: 'สาขาวิชาเทคโนโลยีสุขภาพ เครื่องสำอาง และการชะลอวัย', label: 'สาขาวิชาเทคโนโลยีสุขภาพ เครื่องสำอาง และการชะลอวัย' },
+    { value: 'สาขาวิชาสถิติสารสนเทศ', label: 'สาขาวิชาสถิติสารสนเทศ' },
+    { value: 'สาขาวิชาการจัดการสภาพภูมิอากาศและสิ่งแวดล้อม', label: 'สาขาวิชาการจัดการสภาพภูมิอากาศและสิ่งแวดล้อม' },
+]
+
+
 
 const remove = async (id) => {
     if (confirm("คุณต้องการลบบัญชีผู้ใช้งานนี้ใช่หรือไม่? การกระทำนี้ไม่สามารถย้อนคืนได้")) {
