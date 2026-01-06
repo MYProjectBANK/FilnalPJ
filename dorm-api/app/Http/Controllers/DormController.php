@@ -43,4 +43,27 @@ class DormController extends Controller
 
         return response()->json($dorm);
     }
+
+    
+public function suggest(Request $request)
+{
+    $q = trim((string) $request->query('q', ''));
+
+    if ($q === '' || mb_strlen($q) < 1) {
+        return response()->json([]);
+    }
+
+    $items = Dorm::query()
+        ->select('id', 'name', 'province', 'district', 'subdistrict', 'price_min')
+        ->where(function ($query) use ($q) {
+            $query->where('name', 'like', "%{$q}%")
+                  ->orWhere('province', 'like', "%{$q}%")
+                  ->orWhere('district', 'like', "%{$q}%")
+                  ->orWhere('subdistrict', 'like', "%{$q}%");
+        })
+        ->limit(8)
+        ->get();
+
+    return response()->json($items);
+}
 }

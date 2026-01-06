@@ -64,50 +64,55 @@ class PublicDormController extends Controller
     /**
      * ⭐ NEW: ระบบฟิลเตอร์เต็มรูปแบบ
      */
-    public function filter(Request $req)
-    {
-        $query = Dorm::query()->with(['images', 'categories', 'zones', 'amenities', 'busRoutes']);
+public function filter(Request $req) {
+    $perPage = (int) ($req->per_page ?? 12);
+    $perPage = max(1, min($perPage, 48));
 
-        // Search by name
-        if ($req->search) {
-            $query->where('name', 'LIKE', "%{$req->search}%");
-        }
 
-        // Category filter
-        if ($req->category) {
-            $query->whereHas('categories', fn($q) =>
-                $q->where('category_id', $req->category)
-            );
-        }
+    $query = Dorm::query()->with(['images','categories','zones','amenities','busRoutes']);
 
-        // Amenity filter
-        if ($req->amenity) {
-            $query->whereHas('amenities', fn($q) =>
-                $q->where('amenity_id', $req->amenity)
-            );
-        }
-
-        // Bus Route filter
-        if ($req->bus) {
-            $query->whereHas('busRoutes', fn($q) =>
-                $q->where('bus_route_id', $req->bus)
-            );
-        }
-
-        // Price range filter
-        if ($req->price_min && $req->price_max) {
-            $query->whereBetween('price_min', [
-                $req->price_min,
-                $req->price_max
-            ]);
-        }
-
-        // return results with price_range field added
-        return $query->get()->map(function ($d) {
-            $d->price_range = $this->priceRange($d);
-            return $d;
+    // Search: ชื่อ + จังหวัด/อำเภอ/ตำบล (แนะนำ)
+    if ($req->search) {
+        $s = $req->search;
+        $query->where(function ($q) use ($s) {
+            $q->where('name', 'LIKE', "%{$s}%")
+              ->orWhere('province', 'LIKE', "%{$s}%")
+              ->orWhere('district', 'LIKE', "%{$s}%")
+              ->orWhere('subdistrict', 'LIKE', "%{$s}%");
         });
     }
+
+    if ($req->category) {
+        $query->whereHas('categories', fn($q) => $q->where('category_id', $req->category));
+    }
+
+    if (!empty($req->amenity)) {
+        $ids = is_array($req->amenity) ? $req->amenity : [$req->amenity];
+        $query->whereHas('amenities', fn($q) => $q->whereIn('amenity_id', $ids));
+    }
+
+    if ($req->bus) {
+        $query->whereHas('busRoutes', fn($q) => $q->where('bus_route_id', $req->bus));
+    }
+
+    if ($req->filled('price_min') && $req->filled('price_max')) {
+    $query->whereBetween('price_min', [(int)$req->price_min, (int)$req->price_max]);
+}
+
+
+    // ✅ paginate
+    $paginator = $query->paginate($perPage)->appends($req->query());
+
+
+    $paginator->getCollection()->transform(function ($d) {
+        $d->price_range = $this->priceRange($d);
+        return $d;
+    });
+
+    return response()->json($paginator);
+}
+
+
 
     private function priceRange($dorm)
     {

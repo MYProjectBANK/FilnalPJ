@@ -2,11 +2,22 @@
   <div class="min-h-screen bg-gray-50 py-8">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-      <button @click="$router.back()"
-        class="group mb-6 flex items-center text-gray-500 hover:text-blue-600 transition font-medium">
-        <span class="bg-white p-2 rounded-full shadow-sm mr-2 group-hover:bg-blue-50">←</span>
-        ย้อนกลับไปหน้าค้นหา
+      <button type="button" @click="$router.back()" class="group mb-6 inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2
+         text-sm font-semibold text-gray-700 shadow-sm transition
+         hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700
+         focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+        <span class="grid h-9 w-9 place-items-center rounded-lg bg-gray-50 text-gray-600 transition
+           group-hover:bg-white group-hover:text-blue-700" aria-hidden="true">
+          <!-- Arrow Left (SVG) -->
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none">
+            <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
+        </span>
+
+        <span>ย้อนกลับไปหน้าค้นหา</span>
       </button>
+
 
       <div v-if="loading" class="flex flex-col items-center justify-center py-20">
         <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4"></div>
@@ -18,34 +29,99 @@
         <DormDetailContent :dorm="dorm" :reviews="approvedReviews" mode="user">
 
           <template #favorite>
-            <button v-if="isLoggedIn" @click="toggleFavorite"
-              class="flex items-center gap-2 px-5 py-2.5 rounded-full font-medium transition-all shadow-sm border"
-              :class="isFavorite
-                ? 'bg-pink-50 text-pink-600 border-pink-200 hover:bg-pink-100'
-                : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'">
-              <span :class="isFavorite ? 'scale-110' : ''" class="transition-transform duration-200">
-                {{ isFavorite ? "❤️" : "🤍" }}
+            <button v-if="isLoggedIn" @click="toggleFavorite" type="button" class="inline-flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-semibold transition
+           shadow-sm border focus:outline-none focus:ring-2 focus:ring-offset-2" :class="isFavorite
+            ? 'bg-indigo-600 text-white border-indigo-600 hover:bg-indigo-700 focus:ring-indigo-600'
+            : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50 focus:ring-gray-300'">
+              <!-- Bookmark icon -->
+              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M7 3h10a2 2 0 0 1 2 2v16l-7-4-7 4V5a2 2 0 0 1 2-2Z"
+                  :stroke="isFavorite ? 'white' : 'currentColor'" stroke-width="2" stroke-linejoin="round" />
+                <path v-if="isFavorite" d="M9 11l2 2 4-5" stroke="white" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg>
+
+              <span class="whitespace-nowrap">
+                {{ isFavorite ? "บันทึกแล้ว" : "บันทึกรายการโปรด" }}
               </span>
-              <span>{{ isFavorite ? "บันทึกแล้ว" : "บันทึกรายการโปรด" }}</span>
             </button>
           </template>
 
+
           <template #gallery>
-            <swiper :slides-per-view="1" :space-between="0" :pagination="{ clickable: true }" :navigation="true"
-              :modules="[Pagination, Navigation]" class="w-full h-[300px] md:h-[450px] bg-gray-200 group">
-              <swiper-slide v-for="img in dorm.images" :key="img.id">
-                <img :src="imageUrl(img.image_path)" class="w-full h-full object-cover" />
-              </swiper-slide>
+            <div>
+              <swiper :slides-per-view="1" :space-between="0" :pagination="{ clickable: true }" :navigation="true"
+                :modules="[Pagination, Navigation]" class="w-full h-[300px] md:h-[450px] bg-gray-200 group">
+                <swiper-slide v-for="(img, idx) in dorm.images" :key="img.id">
+                  <button type="button" class="w-full h-full relative focus:outline-none" @click="openLightbox(idx)"
+                    title="คลิกเพื่อดูรูปขยาย">
+                    <img :src="imageUrl(img.image_path)" class="w-full h-full object-cover" />
 
-              <swiper-slide v-if="!dorm.images.length">
-                <div class="w-full h-full flex flex-col items-center justify-center text-gray-400 bg-gray-100">
-                  <span class="text-4xl mb-2">📷</span>
-                  <span>ไม่มีรูปภาพ</span>
+                    <!-- hover hint -->
+                    <div
+                      class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition flex items-end justify-end p-4">
+                      <div
+                        class="opacity-0 group-hover:opacity-100 transition bg-white/90 backdrop-blur px-3 py-1.5 rounded-lg text-xs font-semibold text-gray-800">
+                        ดูรูปขยาย
+                      </div>
+                    </div>
+                  </button>
+                </swiper-slide>
+
+                <swiper-slide v-if="!dorm.images?.length">
+                  <div class="w-full h-full flex flex-col items-center justify-center text-gray-400 bg-gray-100">
+                    <span class="text-sm font-medium">ไม่มีรูปภาพ</span>
+                  </div>
+                </swiper-slide>
+              </swiper>
+
+              <!-- Lightbox Modal -->
+              <div v-if="lightboxOpen"
+                class="fixed inset-0 z-[9999] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4"
+                @click.self="closeLightbox">
+                <!-- Close button -->
+                <button
+                  class="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center"
+                  @click="closeLightbox" aria-label="Close">
+                  <svg viewBox="0 0 24 24" class="w-6 h-6" fill="none">
+                    <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                  </svg>
+                </button>
+
+                <!-- Counter -->
+                <div class="absolute top-4 left-4 text-white/90 text-sm">
+                  {{ activeIndex + 1 }} / {{ dorm.images.length }}
                 </div>
-              </swiper-slide>
 
-            </swiper>
+                <!-- Prev -->
+                <button v-if="dorm.images.length > 1"
+                  class="absolute left-4 md:left-6 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center"
+                  @click.stop="prevImage" aria-label="Previous">
+                  <svg viewBox="0 0 24 24" class="w-6 h-6" fill="none">
+                    <path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                      stroke-linejoin="round" />
+                  </svg>
+                </button>
+
+                <!-- Image -->
+                <div class="max-w-6xl w-full flex items-center justify-center">
+                  <img v-if="dorm.images?.length" :src="imageUrl(dorm.images[activeIndex].image_path)"
+                    class="max-h-[82vh] w-auto max-w-full rounded-xl shadow-2xl select-none" draggable="false" />
+                </div>
+
+                <!-- Next -->
+                <button v-if="dorm.images.length > 1"
+                  class="absolute right-4 md:right-6 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center"
+                  @click.stop="nextImage" aria-label="Next">
+                  <svg viewBox="0 0 24 24" class="w-6 h-6" fill="none">
+                    <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                      stroke-linejoin="round" />
+                  </svg>
+                </button>
+              </div>
+            </div>
           </template>
+
 
           <template #review-form>
             <div v-if="isLoggedIn" class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
@@ -92,10 +168,11 @@
 <script setup>
 import 'swiper/css';
 import 'swiper/css/pagination';
-import 'swiper/css/navigation'; // อย่าลืม import css ของ module
+import 'swiper/css/navigation';
 
 import {
   computed,
+  onBeforeUnmount,
   onMounted,
   ref,
 } from 'vue';
@@ -133,6 +210,45 @@ const reviewForm = ref({ comment: "" });
 const approvedReviews = computed(() =>
   reviews.value.filter((r) => r.status === "approved")
 );
+
+const lightboxOpen = ref(false);
+const activeIndex = ref(0);
+
+const openLightbox = (idx) => {
+  activeIndex.value = idx;
+  lightboxOpen.value = true;
+  document.body.style.overflow = "hidden"; // กัน scroll
+};
+
+const closeLightbox = () => {
+  lightboxOpen.value = false;
+  document.body.style.overflow = "";
+};
+
+const nextImage = () => {
+  if (!dorm.value?.images?.length) return;
+  activeIndex.value = (activeIndex.value + 1) % dorm.value.images.length;
+};
+
+const prevImage = () => {
+  if (!dorm.value?.images?.length) return;
+  activeIndex.value =
+    (activeIndex.value - 1 + dorm.value.images.length) % dorm.value.images.length;
+};
+
+const onKeydown = (e) => {
+  if (!lightboxOpen.value) return;
+  if (e.key === "Escape") closeLightbox();
+  if (e.key === "ArrowRight") nextImage();
+  if (e.key === "ArrowLeft") prevImage();
+};
+
+window.addEventListener("keydown", onKeydown);
+
+onBeforeUnmount(() => {
+  window.removeEventListener("keydown", onKeydown);
+  document.body.style.overflow = "";
+});
 
 const fetchDorm = async () => {
   try {

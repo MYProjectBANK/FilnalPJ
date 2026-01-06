@@ -35,7 +35,10 @@ Route::get('/categories', [PublicCategoryController::class, 'index']);
 
 Route::prefix('dorms')->group(function () {
 
-        // ⭐ ฟิลเตอร์ต้องมาก่อน
+    // ✅ แก้เป็น /suggest (ไม่ต้องมี /dorms ซ้ำ)
+    Route::get('/suggest', [DormController::class, 'suggest']);
+
+    // ⭐ ฟิลเตอร์ต้องมาก่อน
     Route::get('/filter', [PublicDormController::class, 'filter']);
 
     // ⭐ ต้องอยู่ก่อนแบบนี้เท่านั้น!!
@@ -45,8 +48,11 @@ Route::prefix('dorms')->group(function () {
 
     // ⭐ ต้องอยู่ล่างสุด
     Route::get('/', [PublicDormController::class, 'index']);
-    Route::get('/{id}', [PublicDormController::class, 'show']);
+
+    // ✅ แนะนำเพิ่ม constraint กัน suggest ชนอีกชั้น
+    Route::get('/{id}', [PublicDormController::class, 'show'])->whereNumber('id');
 });
+
 
 use App\Http\Controllers\PublicAmenityController;
 use App\Http\Controllers\PublicBusRouteController;

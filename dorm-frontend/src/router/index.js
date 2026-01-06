@@ -3,6 +3,7 @@ import {
   createWebHistory,
 } from 'vue-router';
 
+import About from '../views/About.vue';
 import AdminEditDorm from '../views/Admin/AdminEditDorm.vue';
 import Amenities from '../views/Admin/Amenities.vue';
 import BusRoutes from '../views/Admin/BusRoutes.vue';
@@ -21,6 +22,7 @@ import Zones from '../views/Admin/Zones.vue';
 // Auth
 import Login from '../views/Auth/Login.vue';
 import Register from '../views/Auth/Register.vue';
+import Contact from '../views/Contact.vue';
 /* ==============================
    Import Pages
 ============================== */
@@ -33,6 +35,8 @@ import Home from '../views/Home.vue';
 const routes = [
   /* ---------- Public Pages ---------- */
   { path: '/', component: Home },
+  { path: '/about', component: About },
+  { path: '/contact', component: Contact },
 
   /* ---------- Auth ---------- */
   { path: '/login', component: Login },

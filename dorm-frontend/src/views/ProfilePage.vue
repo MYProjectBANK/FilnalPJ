@@ -189,7 +189,7 @@
                             <div class="text-4xl mb-3">💔</div>
                             <h3 class="text-gray-800 font-medium text-lg">ยังไม่มีรายการโปรด</h3>
                             <p class="text-gray-500 mb-6">คุณยังไม่ได้กดถูกใจหอพักไหนเลย ลองไปค้นหาดูสิ!</p>
-                            <button @click="$router.push('/dorms')"
+                            <button @click="$router.push('/')"
                                 class="px-5 py-2 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100 font-medium transition">
                                 ค้นหาหอพัก
                             </button>

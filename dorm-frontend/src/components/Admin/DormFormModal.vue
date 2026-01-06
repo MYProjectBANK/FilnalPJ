@@ -1,7 +1,6 @@
 <template>
     <div v-if="show"
-        class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm flex justify-center items-center z-50 transition-all duration-300"
-        @click.self="close">
+        class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm flex justify-center items-center z-50 transition-all duration-300">
 
         <div
             class="bg-white w-full max-w-5xl h-[90vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-fade-in-up mx-4">

@@ -1,25 +1,14 @@
 <template>
-  <swiper
-    :slides-per-view="1.2"
-    :space-between="16"
-    :breakpoints="{
-      640: { slidesPerView: 2.2 },
-      1024: { slidesPerView: 3.3 }
-    }"
-    class="pb-6"
-  >
+  <swiper :slides-per-view="1.2" :space-between="16" :breakpoints="{
+    640: { slidesPerView: 2.2 },
+    1024: { slidesPerView: 3.3 }
+  }" class="pb-6">
     <swiper-slide v-for="d in dorms" :key="d.id">
-      <div
-        class="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden 
-               cursor-pointer transition hover:shadow-xl"
-        @click="goDetail(d.id)"
-      >
+      <div class="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden 
+               cursor-pointer transition hover:shadow-xl" @click="goDetail(d.id)">
         <!-- รูป -->
         <div class="overflow-hidden h-40">
-          <img
-            :src="getImageUrl(d)"
-            class="w-full h-full object-cover transition duration-300 hover:scale-110"
-          />
+          <img :src="getImageUrl(d)" class="w-full h-full object-cover transition duration-300 hover:scale-110" />
         </div>
 
         <!-- ข้อมูล -->
@@ -39,9 +28,7 @@
       </div>
     </swiper-slide>
 
-    <div v-if="dorms.length === 0" class="text-gray-500 text-center py-4">
-      ไม่มีข้อมูลในหมวดหมู่นี้
-    </div>
+
   </swiper>
 </template>
 
