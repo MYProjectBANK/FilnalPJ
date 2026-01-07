@@ -105,6 +105,8 @@ import {
   useRouter,
 } from 'vue-router';
 
+import { imageUrl } from '@/utils/imageUrl';
+
 import DashboardLayout from '../../components/Admin/DashboardLayout.vue';
 import DormFormModal
   from '../../components/Admin/DormFormModal.vue'; // อย่าลืม Import Modal
@@ -128,7 +130,7 @@ const headers = {
 const fetchDorm = async () => {
   try {
     const res = await axios.get(
-      `http://127.0.0.1:8000/api/admin/dorms/${route.params.id}`,
+      `/api/admin/dorms/${route.params.id}`,
       { headers }
     );
     dorm.value = res.data;
@@ -140,7 +142,7 @@ const fetchDorm = async () => {
 const fetchReviews = async () => {
   try {
     const res = await axios.get(
-      `http://127.0.0.1:8000/api/reviews/${route.params.id}`,
+      `/api/reviews/${route.params.id}`,
       { headers }
     );
     reviews.value = res.data;
@@ -152,13 +154,13 @@ const fetchReviews = async () => {
 // --- ACTIONS ---
 const approveReview = async (id) => {
   if (!confirm("ยืนยันอนุมัติรีวิว?")) return;
-  await axios.put(`http://127.0.0.1:8000/api/admin/reviews/${id}/approve`, {}, { headers });
+  await axios.put(`/api/admin/reviews/${id}/approve`, {}, { headers });
   await fetchReviews();
 };
 
 const rejectReview = async (id) => {
   if (!confirm("ยืนยันปฏิเสธรีวิว?")) return;
-  await axios.put(`http://127.0.0.1:8000/api/admin/reviews/${id}/reject`, {}, { headers });
+  await axios.put(`/api/admin/reviews/${id}/reject`, {}, { headers });
   await fetchReviews();
 };
 
@@ -166,7 +168,7 @@ const deleteDorm = async () => {
   if (!confirm(`⚠️ คำเตือน: คุณต้องการลบ "${dorm.value.name}" ใช่หรือไม่?\nการกระทำนี้ไม่สามารถกู้คืนได้`)) return;
 
   try {
-    await axios.delete(`http://127.0.0.1:8000/api/admin/dorms/${dorm.value.id}`, { headers });
+    await axios.delete(`/api/admin/dorms/${dorm.value.id}`, { headers });
     alert("ลบข้อมูลสำเร็จ");
     router.push('/admin/dorms');
   } catch (e) {
@@ -200,7 +202,7 @@ const handleUpdateDorm = async (form) => {
 
     // ใช้ _method=PUT เพราะ FormData ส่ง PUT ตรงๆ ไม่ได้ในบาง Backend
     await axios.post(
-      `http://127.0.0.1:8000/api/admin/dorms/${dorm.value.id}?_method=PUT`,
+      `/api/admin/dorms/${dorm.value.id}?_method=PUT`,
       fd,
       config
     );
@@ -214,10 +216,10 @@ const handleUpdateDorm = async (form) => {
   }
 };
 
-const imageUrl = (path) => {
-  if (!path) return "/no-image.jpg";
-  return `http://127.0.0.1:8000/storage/${path}`;
-};
+// const imageUrl = (path) => {
+//   if (!path) return "/no-image.jpg";
+//   return `/storage/${path}`;
+// };
 
 onMounted(async () => {
   loading.value = true;

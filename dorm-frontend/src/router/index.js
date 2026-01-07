@@ -34,13 +34,13 @@ import Home from '../views/Home.vue';
 ============================== */
 const routes = [
   /* ---------- Public Pages ---------- */
-  { path: '/', component: Home },
+{ path: '/', name: 'Home', component: Home },
   { path: '/about', component: About },
   { path: '/contact', component: Contact },
 
   /* ---------- Auth ---------- */
-  { path: '/login', component: Login },
-  { path: '/register', component: Register },
+{ path: '/login', name: 'Login', component: Login },
+{ path: '/register', name: 'Register', component: Register },
 
   { path: '/admin/dashboard', component: Dashboard },
 
@@ -80,6 +80,11 @@ const routes = [
   component: () => import("../views/ProfilePage.vue"),
 },
 
+{
+  path: "/:pathMatch(.*)*",
+  name: "NotFound",
+  component: () => import("../views/NotFound.vue"),
+}
 
 ];
 
@@ -89,7 +94,7 @@ const routes = [
    Router Setup
 ============================== */
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory("/app/"),
   routes,
 });
 
@@ -103,13 +108,14 @@ router.beforeEach((to, from, next) => {
   // ปิดการเข้าหน้า admin สำหรับ user ปกติ
   if (to.path.startsWith('/admin') && role !== 'admin') {
     alert('You are not allowed to access admin page');
-    return next('/login');
+    return next({ name: 'Login' });
+
   }
 
   // ถ้า login แล้ว ไม่ให้กลับไปหน้า login/register
   if ((to.path === '/login' || to.path === '/register') && token) {
-    if (role === 'admin') return next('/admin/dorms');
-    return next('/');
+if (role === 'admin') return next({ path: '/admin/dorms' });
+return next({ path: '/' });
   }
 
   next();

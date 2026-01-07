@@ -143,7 +143,7 @@ const config = { headers: { Authorization: `Bearer ${token}` } };
 const fetchZones = async () => {
     loading.value = true;
     try {
-        const res = await axios.get("http://127.0.0.1:8000/api/admin/zones", config);
+        const res = await axios.get("/api/admin/zones", config);
         zones.value = res.data.data || res.data;
     } catch (error) {
         console.error("Error fetching zones:", error);
@@ -169,9 +169,9 @@ const save = async () => {
 
     try {
         if (mode.value === "create") {
-            await axios.post("http://127.0.0.1:8000/api/admin/zones", form.value, config);
+            await axios.post("/api/admin/zones", form.value, config);
         } else {
-            await axios.put(`http://127.0.0.1:8000/api/admin/zones/${form.value.id}`, form.value, config);
+            await axios.put(`/api/admin/zones/${form.value.id}`, form.value, config);
         }
         showModal.value = false;
         fetchZones();
@@ -183,7 +183,7 @@ const save = async () => {
 const remove = async (id) => {
     if (confirm("ยืนยันการลบโซนนี้? การกระทำนี้อาจส่งผลต่อข้อมูลหอพักที่อยู่ในโซนนี้ด้วย")) {
         try {
-            await axios.delete(`http://127.0.0.1:8000/api/admin/zones/${id}`, config);
+            await axios.delete(`/api/admin/zones/${id}`, config);
             fetchZones();
         } catch (error) {
             alert("ไม่สามารถลบข้อมูลได้");

@@ -214,7 +214,7 @@ const showToast = (msg) => {
 // Main Logic
 const register = async () => {
   try {
-    await axios.post('http://127.0.0.1:8000/api/register', {
+    await axios.post('/api/register', {
       fullname: fullname.value,
       email: email.value,
       password: password.value,

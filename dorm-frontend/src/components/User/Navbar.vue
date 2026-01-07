@@ -92,13 +92,17 @@
 </template>
 
 <script setup>
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
 const token = localStorage.getItem("token");
 const role = localStorage.getItem("role");
 
 const logout = () => {
-  localStorage.removeItem("token");
-  localStorage.removeItem("role");
-  window.location.href = "/login";
+  localStorage.removeItem('token');
+  localStorage.removeItem('role');
+  router.push({ name: 'Login' }); // หรือ router.push('/login')
 };
 </script>
 

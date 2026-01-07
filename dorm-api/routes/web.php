@@ -12,6 +12,9 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+Route::get('/login', fn () => redirect('/app/login'));
+Route::get('/register', fn () => redirect('/app/register'));
+
 
 Route::get('/', function () {
     return view('welcome');

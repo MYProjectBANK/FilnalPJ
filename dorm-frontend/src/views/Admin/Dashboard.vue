@@ -168,7 +168,7 @@ const config = { headers: { Authorization: `Bearer ${token}` } };
 
 const fetchStats = async () => {
   try {
-    const res = await axios.get("http://127.0.0.1:8000/api/admin/dashboard/stats", config);
+    const res = await axios.get("/api/admin/dashboard/stats", config);
     stats.value = res.data;
   } catch (error) {
     console.error("Failed to fetch stats", error);

@@ -163,7 +163,7 @@ const config = { headers: { Authorization: `Bearer ${token}` } };
 const fetchList = async () => {
     loading.value = true;
     try {
-        const res = await axios.get("http://127.0.0.1:8000/api/admin/train-lines", config);
+        const res = await axios.get("/api/admin/train-lines", config);
         list.value = res.data.data ?? res.data;
     } catch (error) {
         console.error("Error fetching train lines:", error);
@@ -195,12 +195,12 @@ const save = async () => {
 
     try {
         if (mode.value === "create") {
-            await axios.post("http://127.0.0.1:8000/api/admin/train-lines", {
+            await axios.post("/api/admin/train-lines", {
                 line_name: form.value.line_name,
                 station_name: form.value.station_name
             }, config);
         } else {
-            await axios.put(`http://127.0.0.1:8000/api/admin/train-lines/${form.value.id}`, {
+            await axios.put(`/api/admin/train-lines/${form.value.id}`, {
                 line_name: form.value.line_name,
                 station_name: form.value.station_name
             }, config);
@@ -215,7 +215,7 @@ const save = async () => {
 const remove = async (id) => {
     if (confirm("ยืนยันการลบสถานีรถไฟฟ้า? ข้อมูลการเดินทางที่เกี่ยวข้องจะถูกลบออกด้วย")) {
         try {
-            await axios.delete(`http://127.0.0.1:8000/api/admin/train-lines/${id}`, config);
+            await axios.delete(`/api/admin/train-lines/${id}`, config);
             fetchList();
         } catch (error) {
             alert("ไม่สามารถลบข้อมูลได้");

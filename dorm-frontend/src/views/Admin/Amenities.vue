@@ -143,7 +143,7 @@ const config = { headers: { Authorization: `Bearer ${token}` } };
 const fetchAmenities = async () => {
     loading.value = true;
     try {
-        const res = await axios.get("http://127.0.0.1:8000/api/admin/amenities", config);
+        const res = await axios.get("/api/admin/amenities", config);
         amenities.value = res.data.data || res.data;
     } catch (error) {
         console.error("Error fetching amenities:", error);
@@ -169,9 +169,9 @@ const save = async () => {
     
     try {
         if (mode.value === "create") {
-            await axios.post("http://127.0.0.1:8000/api/admin/amenities", form.value, config);
+            await axios.post("/api/admin/amenities", form.value, config);
         } else {
-            await axios.put(`http://127.0.0.1:8000/api/admin/amenities/${form.value.id}`, form.value, config);
+            await axios.put(`/api/admin/amenities/${form.value.id}`, form.value, config);
         }
         showModal.value = false;
         fetchAmenities();
@@ -183,7 +183,7 @@ const save = async () => {
 const remove = async (id) => {
     if (confirm("ยืนยันการลบรายการนี้?")) {
         try {
-            await axios.delete(`http://127.0.0.1:8000/api/admin/amenities/${id}`, config);
+            await axios.delete(`/api/admin/amenities/${id}`, config);
             fetchAmenities();
         } catch (error) {
             alert("ไม่สามารถลบข้อมูลได้");

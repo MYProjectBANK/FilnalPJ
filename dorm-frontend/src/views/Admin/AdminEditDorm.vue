@@ -341,19 +341,19 @@ export default {
         const headers = { Authorization: `Bearer ${token}` };
 
         // Helper: Base URL for images
-        const imageUrl = (path) => `http://127.0.0.1:8000/storage/${path}`;
+        const imageUrl = (path) => `/storage/${path}`;
 
         // Load dorm + all related lists
         const fetchDorm = async () => {
             loading.value = true;
             try {
                 const [dormRes, catRes, amenRes, zoneRes, busRes, trainRes] = await Promise.all([
-                    axios.get(`http://127.0.0.1:8000/api/admin/dorms/${route.params.id}`, { headers }),
-                    axios.get("http://127.0.0.1:8000/api/admin/categories", { headers }),
-                    axios.get("http://127.0.0.1:8000/api/admin/amenities", { headers }),
-                    axios.get("http://127.0.0.1:8000/api/admin/zones", { headers }),
-                    axios.get("http://127.0.0.1:8000/api/admin/bus-routes", { headers }),
-                    axios.get("http://127.0.0.1:8000/api/admin/train-lines", { headers }),
+                    axios.get(`/api/admin/dorms/${route.params.id}`, { headers }),
+                    axios.get("/api/admin/categories", { headers }),
+                    axios.get("/api/admin/amenities", { headers }),
+                    axios.get("/api/admin/zones", { headers }),
+                    axios.get("/api/admin/bus-routes", { headers }),
+                    axios.get("/api/admin/train-lines", { headers }),
                 ]);
 
                 dorm.value = dormRes.data;
@@ -397,7 +397,7 @@ export default {
 
             try {
                 await axios.post(
-                    `http://127.0.0.1:8000/api/admin/dorms/${dorm.value.id}?_method=PUT`,
+                    `/api/admin/dorms/${dorm.value.id}?_method=PUT`,
                     fd,
                     { headers }
                 );
@@ -423,7 +423,7 @@ export default {
 
             try {
                 await axios.post(
-                    `http://127.0.0.1:8000/api/admin/dorms/${dorm.value.id}?_method=PUT`,
+                    `/api/admin/dorms/${dorm.value.id}?_method=PUT`,
                     fd,
                     { headers }
                 );
@@ -444,7 +444,7 @@ export default {
 
             try {
                 await axios.delete(
-                    `http://127.0.0.1:8000/api/admin/dorm-images/${deleteId}`,
+                    `/api/admin/dorm-images/${deleteId}`,
                     { headers }
                 );
                 await fetchDorm();

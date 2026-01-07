@@ -142,7 +142,7 @@ const config = {
 const fetchCategories = async () => {
     loading.value = true;
     try {
-        const res = await axios.get("http://127.0.0.1:8000/api/admin/categories", config);
+        const res = await axios.get("/api/admin/categories", config);
         // ตรวจสอบโครงสร้างข้อมูลว่า API ส่งมาแบบไหน (บางทีอาจจะไม่มี .data ซ้อน)
         categories.value = res.data.data || res.data; 
     } catch (error) {
@@ -169,9 +169,9 @@ const save = async () => {
 
     try {
         if (mode.value === "create") {
-            await axios.post("http://127.0.0.1:8000/api/admin/categories", form.value, config);
+            await axios.post("/api/admin/categories", form.value, config);
         } else {
-            await axios.put(`http://127.0.0.1:8000/api/admin/categories/${form.value.id}`, form.value, config);
+            await axios.put(`/api/admin/categories/${form.value.id}`, form.value, config);
         }
         showModal.value = false;
         fetchCategories();
@@ -183,7 +183,7 @@ const save = async () => {
 const remove = async (id) => {
     if (confirm("ยืนยันการลบหมวดหมู่นี้? ข้อมูลที่เกี่ยวข้องอาจได้รับผลกระทบ")) {
         try {
-            await axios.delete(`http://127.0.0.1:8000/api/admin/categories/${id}`, config);
+            await axios.delete(`/api/admin/categories/${id}`, config);
             fetchCategories();
         } catch (error) {
             alert("ไม่สามารถลบข้อมูลได้");

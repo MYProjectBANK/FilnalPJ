@@ -191,6 +191,8 @@ import {
   useRouter,
 } from 'vue-router';
 
+import { imageUrl } from '@/utils/imageUrl';
+
 import api from '../axios';
 import DormDetailContent from '../components/Dorm/DormDetailContent.vue';
 
@@ -269,10 +271,10 @@ const fetchReviews = async () => {
   }
 };
 
-const imageUrl = (path) => {
-  if (!path) return "/no-image.jpg"; // แก้ path ตามจริง
-  return `http://127.0.0.1:8000/storage/${path}`;
-};
+// const imageUrl = (path) => {
+//   if (!path) return "/no-image.jpg"; // แก้ path ตามจริง
+//   return `/storage/${path}`;
+// };
 
 // FAVORITE
 const fetchFavoriteStatus = async () => {

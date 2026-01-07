@@ -230,7 +230,7 @@ const config = { headers: { Authorization: `Bearer ${token}` } };
 const fetchUsers = async () => {
     loading.value = true;
     try {
-        const res = await axios.get("http://127.0.0.1:8000/api/admin/users", config);
+        const res = await axios.get("/api/admin/users", config);
         users.value = res.data.data || res.data;
     } catch (e) {
         console.error(e);
@@ -256,9 +256,9 @@ const save = async () => {
 
     try {
         if (mode.value === "create") {
-            await axios.post("http://127.0.0.1:8000/api/admin/users", form.value, config);
+            await axios.post("/api/admin/users", form.value, config);
         } else {
-            await axios.put(`http://127.0.0.1:8000/api/admin/users/${form.value.id}`, form.value, config);
+            await axios.put(`/api/admin/users/${form.value.id}`, form.value, config);
         }
         showModal.value = false;
         fetchUsers();
@@ -298,7 +298,7 @@ const facultyOptions = [
 const remove = async (id) => {
     if (confirm("คุณต้องการลบบัญชีผู้ใช้งานนี้ใช่หรือไม่? การกระทำนี้ไม่สามารถย้อนคืนได้")) {
         try {
-            await axios.delete(`http://127.0.0.1:8000/api/admin/users/${id}`, config);
+            await axios.delete(`/api/admin/users/${id}`, config);
             fetchUsers();
         } catch (e) {
             alert("ไม่สามารถลบข้อมูลได้");

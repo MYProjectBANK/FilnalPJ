@@ -285,7 +285,7 @@ const userInitial = computed(() =>
 );
 
 const imageUrl = (path) =>
-    path ? `http://127.0.0.1:8000/storage/${path}` : "/no-image.jpg";
+    path ? `/storage/${path}` : "/no-image.jpg";
 
 /* ---------------- API ---------------- */
 const loadUser = async () => {

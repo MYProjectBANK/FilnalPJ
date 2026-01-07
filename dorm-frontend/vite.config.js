@@ -9,7 +9,20 @@ export default defineConfig({
     vue(),
     tailwindcss(),
   ],
-  resolve: {                // ✅ ต้องมี resolve
+    server: {
+    proxy: {
+      '/api': {
+        target: 'http://127.0.0.1:8000',
+        changeOrigin: true,
+      },
+      '/storage': {
+        target: 'http://127.0.0.1:8000',
+        changeOrigin: true,
+      },
+    },
+  },
+  base: "/app/",
+  resolve: {                
     alias: {
       '@': path.resolve(__dirname, './src'),
     },

@@ -165,7 +165,7 @@ const config = { headers: { Authorization: `Bearer ${token}` } };
 const fetchList = async () => {
     loading.value = true;
     try {
-        const res = await axios.get("http://127.0.0.1:8000/api/admin/bus-routes", config);
+        const res = await axios.get("/api/admin/bus-routes", config);
         list.value = res.data.data ?? res.data;
     } catch (e) {
         console.error(e);
@@ -196,9 +196,9 @@ const save = async () => {
         };
 
         if (mode.value === "create") {
-            await axios.post("http://127.0.0.1:8000/api/admin/bus-routes", payload, config);
+            await axios.post("/api/admin/bus-routes", payload, config);
         } else {
-            await axios.put(`http://127.0.0.1:8000/api/admin/bus-routes/${form.value.id}`, payload, config);
+            await axios.put(`/api/admin/bus-routes/${form.value.id}`, payload, config);
         }
         showModal.value = false;
         fetchList();
@@ -210,7 +210,7 @@ const save = async () => {
 const remove = async (id) => {
     if (confirm("คุณต้องการลบสายรถเมล์นี้ใช่หรือไม่?")) {
         try {
-            await axios.delete(`http://127.0.0.1:8000/api/admin/bus-routes/${id}`, config);
+            await axios.delete(`/api/admin/bus-routes/${id}`, config);
             fetchList();
         } catch (e) {
             alert("ไม่สามารถลบข้อมูลได้");

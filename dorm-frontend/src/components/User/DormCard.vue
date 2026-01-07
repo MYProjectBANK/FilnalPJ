@@ -35,6 +35,6 @@ const open = () => {
 
 const imageUrl = (path) => {
   if (!path) return "/assets/no-image.png";
-  return `http://127.0.0.1:8000/storage/${path}`;
+  return `/storage/${path}`;
 };
 </script>

@@ -26,7 +26,7 @@
       <div class="h-1 w-12 bg-gray-800 rounded mb-6"></div>
 
       <div class="flex gap-4 overflow-x-auto pb-3">
-        <div v-for="u in universities" :key="u.id" class="w-32 flex-shrink-0 cursor-pointer group"
+        <div v-for="u in universities" :key="u.id" class="w-32 shrink-0 cursor-pointer group"
           @click="$emit('select', u)">
           <!-- รูป + overlay -->
           <div class="relative h-24 rounded-lg overflow-hidden shadow">

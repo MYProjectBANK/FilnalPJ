@@ -155,7 +155,7 @@ export default {
 
     // Fetch all dorms
     const fetchDorms = async () => {
-      const res = await axios.get("http://127.0.0.1:8000/api/admin/dorms", {
+      const res = await axios.get("/api/admin/dorms", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -219,10 +219,10 @@ export default {
       };
 
       if (modalMode.value === "create") {
-        await axios.post("http://127.0.0.1:8000/api/admin/dorms", fd, config);
+        await axios.post("/api/admin/dorms", fd, config);
       } else {
         await axios.post(
-          `http://127.0.0.1:8000/api/admin/dorms/${selectedDorm.value.id}?_method=PUT`,
+          `/api/admin/dorms/${selectedDorm.value.id}?_method=PUT`,
           fd,
           config
         );
@@ -236,7 +236,7 @@ export default {
     const deleteDorm = async (id) => {
       if (!confirm(`ต้องการลบหอพัก ID ${id} จริงหรือไม่?`)) return;
 
-      await axios.delete(`http://127.0.0.1:8000/api/admin/dorms/${id}`, {
+      await axios.delete(`/api/admin/dorms/${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },

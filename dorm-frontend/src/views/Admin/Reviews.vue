@@ -107,7 +107,7 @@ const config = { headers: { Authorization: `Bearer ${token}` } };
 const fetchReviews = async () => {
     loading.value = true;
     try {
-        const res = await axios.get("http://127.0.0.1:8000/api/admin/reviews/pending", config);
+        const res = await axios.get("/api/admin/reviews/pending", config);
         reviews.value = res.data.data ?? res.data;
     } catch (e) {
         console.error("Fetch reviews error:", e);
@@ -119,7 +119,7 @@ const fetchReviews = async () => {
 const approve = async (id) => {
     if (!confirm("ต้องการอนุมัติรีวิวนี้ให้แสดงผลบนหน้าเว็บไซต์ใช่หรือไม่?")) return;
     try {
-        await axios.put(`http://127.0.0.1:8000/api/admin/reviews/${id}/approve`, {}, config);
+        await axios.put(`/api/admin/reviews/${id}/approve`, {}, config);
         fetchReviews();
     } catch (e) {
         alert("ไม่สามารถอนุมัติได้");
@@ -129,7 +129,7 @@ const approve = async (id) => {
 const reject = async (id) => {
     if (!confirm("ยืนยันการปฏิเสธรีวิวนี้? ข้อมูลจะถูกเก็บไว้ในระบบแต่ไม่แสดงผลต่อสาธารณะ")) return;
     try {
-        await axios.put(`http://127.0.0.1:8000/api/admin/reviews/${id}/reject`, {}, config);
+        await axios.put(`/api/admin/reviews/${id}/reject`, {}, config);
         fetchReviews();
     } catch (e) {
         alert("ไม่สามารถปฏิเสธได้");

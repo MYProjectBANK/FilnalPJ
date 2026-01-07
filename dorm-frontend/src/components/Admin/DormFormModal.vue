@@ -388,11 +388,11 @@ onMounted(async () => {
     try {
         // Load Master Data
         const [catRes, amRes, zoneRes, busRes, trainRes] = await Promise.all([
-            axios.get("http://127.0.0.1:8000/api/admin/categories", config),
-            axios.get("http://127.0.0.1:8000/api/admin/amenities", config),
-            axios.get("http://127.0.0.1:8000/api/admin/zones", config),
-            axios.get("http://127.0.0.1:8000/api/admin/bus-routes", config),
-            axios.get("http://127.0.0.1:8000/api/admin/train-lines", config)
+            axios.get("/api/admin/categories", config),
+            axios.get("/api/admin/amenities", config),
+            axios.get("/api/admin/zones", config),
+            axios.get("/api/admin/bus-routes", config),
+            axios.get("/api/admin/train-lines", config)
         ]);
 
         categories.value = catRes.data.data;
